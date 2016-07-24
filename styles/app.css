@@ -1,0 +1,144 @@
+html, head {
+    height: calc(100% - 20px);
+}
+
+body {
+  height: calc(100% - 20px);
+  width: calc(100% - 20px);
+  margin: 10px;
+  background: #f8f8f8;
+}
+
+.card {
+  position: relative;
+  border-radius: 2px;
+  box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12);
+  padding: 10px;
+  height: 100%;
+  background: white;
+  /*animation: slide-in-from-bottom .5s .25s ease both;*/
+}
+
+@keyframes slide-in-from-bottom {
+    from {
+        transform: translateY(15rem);
+        opacity: 0;
+    }
+}
+
+.pure-g {
+  height: 100%;
+}
+
+.pure-g .title {
+  text-align: center;
+  margin: 10px auto;
+}
+
+.pure-u-4-24
+.pure-u-sm-4-24,
+.pure-u-md-4-24,
+.pure-u-lg-4-24 {
+  margin: 0 auto;
+  height: calc(100% - 60px);
+}
+
+.pure-u-9-24,
+.pure-u-sm-9-24,
+.pure-u-md-9-24,
+.pure-u-lg-9-24 {
+  margin: 0 auto;
+  height: calc(100% - 60px);
+}
+
+.button-success,
+.button-error,
+.button-warning,
+.button-secondary {
+    color: white;
+    border-radius: 4px;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+.button-success {
+    background: rgb(28, 184, 65); /* this is a green */
+}
+
+.button-error {
+    background: rgb(202, 60, 60); /* this is a maroon */
+}
+
+.button-warning {
+    background: rgb(223, 117, 20); /* this is an orange */
+}
+
+.button-secondary {
+    background: rgb(66, 184, 221); /* this is a light blue */
+}
+
+.recentList, .requestForm, .responseView {
+  width: 100%;
+  height: calc(100% - 20px);
+  border: 1px solid #ccc;
+  border-radius: 2px;
+}
+
+.recentList {
+  overflow-y: auto;
+}
+
+.saved-list-item {
+  cursor: pointer;
+}
+
+.saved-list-item .delete:hover {
+  color: red;
+  font-weight: bold;
+}
+
+.saved-list-item .label {
+  text-indent: 10px;
+  color: red;
+  margin-top: 0;
+  margin-bottom: 10px;
+  display: inline-block;
+  font-weight: bold;
+}
+
+.saved-list-item .site {
+  text-indent: 5px;
+  white-space: nowrap;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: monospace;
+}
+
+.requestForm {
+  height: calc(100% - 40px);
+  padding: 10px;
+}
+
+.form-control-group {
+  margin-bottom: 10px;
+}
+
+.headers ol#headers-list {
+  max-height: 108px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.headers-list-item {
+  display: list-item;
+}
+
+textarea.body {
+  resize: none;
+  overflow-y: auto;
+}
+
+.form-actions button {
+  float: right;
+  margin: 0 5px;
+}

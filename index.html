@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <title>Ajax Explorer</title>
+
+    <link rel="stylesheet" href="./styles/pure-min.css" />
+    <link rel="stylesheet" href="./styles/app.css" />
+
+    <script type="text/javascript" src="./scripts/app.js"></script>
+  </head>
+  <body>
+    <div class="card">
+      <div class="pure-g">
+        <h3 class="title pure-u-1"><u>Super Endpoint Explorer</u></h3>
+        <div class="pure-u-4-24 pure-u-sm-4-24 pure-u-md-4-24 pure-u-lg-4-24">
+          <h4 class="pure-u-1 title">Saved</h4>
+          <div class="recentList">
+            <div class="pure-u-1 saved-list-item">
+              <span class="pure-u-1-10 delete">X</span>
+              <div class="pure-u-22-24 label">example</div>
+              <span class="pure-u-1 site">http://www.google.com</span>
+              <hr>
+            </div>
+          </div>
+        </div>
+        <div class="pure-u-9-24 pure-u-sm-9-24 pure-u-md-9-24 pure-u-lg-9-24">
+          <h4 class="pure-u-1 title">Request Form</h4>
+          <div class="requestForm">
+            <div class="pure-form pure-g">
+              <div class="form-control-group">
+                <div class="pure-u-1-4">
+                  <label for="type">Type</label>
+                  <select id="reqType" class="pure-input-1">
+                    <option value="GET">GET</option>
+                    <option value="POST">POST</option>
+                    <option value="PUT">PUT</option>
+                    <option value="DELETE">DELETE</option>
+                  </select>
+                </div>
+                <div class="pure-u-3-4">
+                  <label for="url">URL</label>
+                  <input class="pure-input-1" name="url" type="url"/>
+                </div>
+              </div>
+              <div class="pure-u-1 headers form-control-group">
+                <label>Headers</label><br />
+                <ol id="headers-list">
+                  <li class="pure-u-1 headers-list-item">
+                    <input class="pure-u-3-8 key" type="text" placeholder="key" />
+                    <input class="pure-u-3-8 value" type="text" placeholder="value" />
+                  </li>
+                </ol>
+              </div>
+              <div class="pure-u-1 form-control-group">
+                <label for="body">Body</label>
+                <textarea class="pure-input-1 body" rows="7" id="body" disabled></textarea>
+              </div>
+              <div class="pure-u-1 form-actions">
+                <button class="pure-button button-error pure-u-2-8">Clear</button>
+                <button class="pure-button button-success pure-u-2-8">Send</button>
+                <button class="pure-button button-secondary pure-u-2-8 pure-button-disabled" id="pretty">Pretty Print Body</button>
+                <button class="pure-button pure-button-primary pure-u-2-8" id="save">Save Request</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="pure-u-9-24 pure-u-sm-9-24 pure-u-md-9-24 pure-u-lg-9-24">
+          <h4 class="pure-u-1 title">Form Preview</h4>
+          <div class="responseView">
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
