@@ -35,26 +35,16 @@ body {
   margin: 10px auto;
 }
 
-.pure-u-4-24
-.pure-u-sm-4-24,
-.pure-u-md-4-24,
-.pure-u-lg-4-24 {
+.explorer-card {
   margin: 0 auto;
-  height: calc(100% - 60px);
-}
-
-.pure-u-9-24,
-.pure-u-sm-9-24,
-.pure-u-md-9-24,
-.pure-u-lg-9-24 {
-  margin: 0 auto;
-  height: calc(100% - 60px);
+  height: calc(100% - 60px)
 }
 
 .button-success,
 .button-error,
 .button-warning,
-.button-secondary {
+.button-secondary,
+.button-primary {
     color: white;
     border-radius: 4px;
     text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
@@ -76,18 +66,25 @@ body {
     background: rgb(66, 184, 221); /* this is a light blue */
 }
 
+.button-primary {
+  background: #0078e7;
+}
+
 .recentList, .requestForm, .responseView {
   width: 100%;
-  height: calc(100% - 20px);
-  border: 1px solid #ccc;
+  height: calc(100% - 40px);
   border-radius: 2px;
+  box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12);
+  padding: 10px
 }
 
 .recentList {
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .saved-list-item {
+  border-bottom: 1px dashed black;
   cursor: pointer;
 }
 
@@ -103,20 +100,17 @@ body {
   margin-bottom: 10px;
   display: inline-block;
   font-weight: bold;
+  font-family: monospace;
+  font-size: 16px;
 }
 
 .saved-list-item .site {
   text-indent: 5px;
   white-space: nowrap;
-  width: 100%;
+  width: 97%;
   overflow: hidden;
   text-overflow: ellipsis;
   font-family: monospace;
-}
-
-.requestForm {
-  height: calc(100% - 40px);
-  padding: 10px;
 }
 
 .form-control-group {
@@ -141,4 +135,16 @@ textarea.body {
 .form-actions button {
   float: right;
   margin: 0 5px;
+}
+
+.responseView .headers,
+.responseView .payload {
+  padding: 5px;
+  border-radius: 2px;
+  height: 38%;
+  margin-left: 2%;
+  font-family: monospace;
+  overflow-y: auto;
+  font-size: 14px;
+  box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12);
 }

@@ -126,4 +126,6 @@ window.onload = function() {
     // confrim with the user that they want it deleted
     /* use confirm() */
   }
+
+  
 };

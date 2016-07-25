@@ -13,22 +13,26 @@
     <div class="card">
       <div class="pure-g">
         <h3 class="title pure-u-1"><u>Super Endpoint Explorer</u></h3>
-        <div class="pure-u-4-24 pure-u-sm-4-24 pure-u-md-4-24 pure-u-lg-4-24">
+        <div class="pure-u-4-24 pure-u-sm-4-24 pure-u-md-4-24 pure-u-lg-4-24 explorer-card">
           <h4 class="pure-u-1 title">Saved</h4>
           <div class="recentList">
             <div class="pure-u-1 saved-list-item">
               <span class="pure-u-1-10 delete">X</span>
               <div class="pure-u-22-24 label">example</div>
-              <span class="pure-u-1 site">http://www.google.com</span>
-              <hr>
+              <span class="pure-u-1 site">http://www.example.com</span>
+            </div>
+            <div class="pure-u-1 saved-list-item">
+              <span class="pure-u-1-10 delete">X</span>
+              <div class="pure-u-22-24 label">example 2</div>
+              <span class="pure-u-1 site">http://www.iAmALongWebsiteName.com</span>
             </div>
           </div>
         </div>
-        <div class="pure-u-9-24 pure-u-sm-9-24 pure-u-md-9-24 pure-u-lg-9-24">
+        <div class="pure-u-9-24 pure-u-sm-9-24 pure-u-md-9-24 pure-u-lg-9-24 explorer-card">
           <h4 class="pure-u-1 title">Request Form</h4>
           <div class="requestForm">
             <div class="pure-form pure-g">
-              <div class="form-control-group">
+              <div class="form-control-group typeUrl">
                 <div class="pure-u-1-4">
                   <label for="type">Type</label>
                   <select id="reqType" class="pure-input-1">
@@ -44,7 +48,7 @@
                 </div>
               </div>
               <div class="pure-u-1 headers form-control-group">
-                <label>Headers</label><br />
+                <label>Header(s):</label><br />
                 <ol id="headers-list">
                   <li class="pure-u-1 headers-list-item">
                     <input class="pure-u-3-8 key" type="text" placeholder="key" />
@@ -52,22 +56,37 @@
                   </li>
                 </ol>
               </div>
-              <div class="pure-u-1 form-control-group">
-                <label for="body">Body</label>
+              <div class="pure-u-1 form-control-group body">
+                <label for="body">Body:</label>
                 <textarea class="pure-input-1 body" rows="7" id="body" disabled></textarea>
               </div>
               <div class="pure-u-1 form-actions">
-                <button class="pure-button button-error pure-u-2-8">Clear</button>
-                <button class="pure-button button-success pure-u-2-8">Send</button>
-                <button class="pure-button button-secondary pure-u-2-8 pure-button-disabled" id="pretty">Pretty Print Body</button>
-                <button class="pure-button pure-button-primary pure-u-2-8" id="save">Save Request</button>
+                <button class="pure-button button-error pure-u-2-10">Clear</button>
+                <button class="pure-button button-success pure-u-2-10">Send</button>
+                <button class="pure-button button-secondary pure-u-2-10 pure-button-disabled" id="pretty">Pretty Print Body</button>
+                <button class="pure-button button-primary pure-u-2-10" id="save">Save Request</button>
               </div>
             </div>
           </div>
         </div>
-        <div class="pure-u-9-24 pure-u-sm-9-24 pure-u-md-9-24 pure-u-lg-9-24">
+        <div class="pure-u-9-24 pure-u-sm-9-24 pure-u-md-9-24 pure-u-lg-9-24 explorer-card">
           <h4 class="pure-u-1 title">Form Preview</h4>
-          <div class="responseView">
+          <div class="pure-u-1 responseView">
+            <span class="pure-u-1">Headers</span>
+            <pre class="pure-u-23-24 headers">
+Pragma: no-cache
+Date: Mon, 25 Jul 2016 04:31:33 GMT
+Content-Encoding: gzip
+Server: Apache/2.2.22 (Ubuntu)
+X-Powered-By: PHP/5.3.10-1ubuntu3.14
+Vary: Accept-Encoding
+Content-Type: text/html
+Cache-Control: no-cache
+Connection: Keep-Alive
+Keep-Alive: timeout=5, max=100</pre>
+            <span class="pure-u-1">Payload</span>
+            <pre class="pure-u-23-24 payload">
+N/A</pre>
           </div>
         </div>
       </div>
