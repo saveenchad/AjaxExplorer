@@ -81,11 +81,13 @@ body {
 .recentList {
   overflow-y: auto;
   overflow-x: hidden;
+  padding: 10px;
 }
 
 .saved-list-item {
   border-bottom: 1px dashed black;
   cursor: pointer;
+  padding-top: 10px;
 }
 
 .saved-list-item .delete:hover {

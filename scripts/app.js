@@ -1,37 +1,81 @@
 window.onload = function() {
   var requestType = document.getElementById("reqType");
-  var prettyBtn = document.getElementById("pretty");
+  var standardHeader = document.getElementById("header-select");
   var bodyFormEl = document.getElementById("body");
 
   addFocusListeners();
 
   // when the select box changes
-  requestType.onchange = function onSelectChange() {
+  requestType.onchange = function onTypeChange() {
     var selectedOpt = requestType.options[requestType.selectedIndex];
 
     if(selectedOpt.text === "GET") {
       bodyFormEl.setAttribute("disabled", "disabled");
-      prettyBtn.classList.add("pure-button-disabled");
     } else {
       bodyFormEl.removeAttribute("disabled");
-      prettyBtn.classList.remove("pure-button-disabled");
     }
   };
 
-  // when the "Pretty Print Body" button is clicked
-  prettyBtn.onclick = function onPrettyClick() {
+  standardHeader.onchange = function onStandardHeaderChange() {
+    var selectedOpt = standardHeader.options[standardHeader.selectedIndex];
+
+    var list = document.getElementById("headers-list");
+    var placeholder, newStandardHeader;
+
+    switch(selectedOpt.value) {
+      case "Accept-Language":
+        placeholder = "en-US";
+        break;
+      case "Connection":
+        placeholder = "Keep-Alive";
+        break;
+      case "Content-Type":
+        placeholder = "text/html"
+        break;
+      case "User-Agent":
+        placeholder = null;
+        break;
+    }
+
+    if(placeholder === null) {
+      var userAgent = window.navigator.userAgent;
+      newStandardHeader = '<li class="pure-u-1 headers-list-item"><input class="pure-u-3-8" type="text" value="' + selectedOpt.value + '"/> <input class="pure-u-3-8" type="text" value="' + userAgent + '" /> <button class="pure-button button-error pure-u-1-8 remove-std-header">X</button></li>';
+    } else {
+      newStandardHeader = '<li class="pure-u-1 headers-list-item"><input class="pure-u-3-8" type="text" value="' + selectedOpt.value + '" /> <input class="pure-u-3-8" type="text" placeholder="' + placeholder + '" /> <button class="pure-button button-error pure-u-1-8 remove-std-header">X</button></li>';
+    }
+
+    list.innerHTML += newStandardHeader;
+
+    selectedOpt.setAttribute("disabled", "disabled");
+    standardHeader.selectedIndex = 0;
+
+    addFocusListeners();
+    addRemoveListeners();
+  };
+
+  bodyFormEl.onkeyup = function() {
+    var selectedOpt = requestType.options[requestType.selectedIndex].text;
+    if(selectedOpt === "GET") return;
+
+    var payloadPreview = document.querySelectorAll("pre.payload")[0];
     var input = bodyFormEl.value;
-    if(input.length === 0) return;
+
+    if(input.length === 0) {
+      payloadPreview.innerHTML = "N/A";
+      return;
+    }
+
     var output;
+
     try {
       var obj = JSON.parse(input);
       output = JSON.stringify(obj, undefined, 4);
-    } catch (e) {
-      alert("[ERROR] Make sure your body is of the form \n\n { \"attribute\" : \"string\", \"attribute\" : number, \"attribute\" : [array] }!");
-      output = input;
+    } catch(e) {
+      output = "[ERROR] Malformed JSON body! Please fix!\n\nMake sure your JSON follows these rules:\n{\n  \"attribute\" : \"string\",\n  \"attribute\" : number,\n  \"attribute\" : [array],\n  \"attribute\" : {object}\n}";
     }
-    bodyFormEl.value = output;
-  };
+
+    payloadPreview.innerHTML = output;
+  }
 
   function addFocusListeners() {
     var headerInputs = document.querySelectorAll(".headers input.key");
@@ -42,8 +86,14 @@ window.onload = function() {
 
   function addRemoveListeners() {
     var buttons = document.querySelectorAll(".remove-header");
+    var stdButtons = document.querySelectorAll(".remove-std-header");
+
     for(var i = 0; i < buttons.length; i++) {
       buttons[i].addEventListener("click", removeHeader);
+    }
+
+    for(var j = 0; j < stdButtons.length; j++) {
+      stdButtons[j].addEventListener("click", removeStandardHeader);
     }
   }
 
@@ -54,7 +104,7 @@ window.onload = function() {
     this.setAttribute("dirty", "true");
 
     var parent = document.getElementById("headers-list");
-    var newHeader = '<li class="pure-u-1 headers-list-item"><input class="pure-u-3-8 key" type="text" placeholder="key" /> <input class="pure-u-3-8 value" type="text" placeholder="value" /> <button class="pure-button button-error pure-u-1-8 remove-header">X</button></li>'
+    var newHeader = '<li class="pure-u-1 headers-list-item"><input class="pure-u-3-8 key" type="text" placeholder="key" /> <input class="pure-u-3-8 value" type="text" placeholder="value" /> <button class="pure-button button-error pure-u-1-8 remove-header">X</button></li>';
     parent.innerHTML += newHeader;
 
     addFocusListeners();
@@ -63,10 +113,27 @@ window.onload = function() {
 
   function removeHeader() {
     var list = document.getElementById("headers-list");
+
     var parent = this.parentElement;
     var prevHeaderKey = parent.previousElementSibling.children[0];
 
     prevHeaderKey.setAttribute("dirty", "false");
+
+    list.removeChild(this.parentNode);
+  }
+
+  function removeStandardHeader() {
+    var list = document.getElementById("headers-list");
+    var header = this.previousElementSibling.previousElementSibling.value;
+    var opt;
+
+    for(var i = 0; i < standardHeader.options.length; i++) {
+      if(standardHeader.options[i].value === header) {
+        opt = i;
+      }
+    }
+
+    standardHeader.options[opt].removeAttribute("disabled");
     list.removeChild(this.parentNode);
   }
 
@@ -127,5 +194,17 @@ window.onload = function() {
     /* use confirm() */
   }
 
-  
+  function createXHR() {
+    try { return new XMLHttpRequest(); } catch(e) {}
+    try { return new ActiveXObject("Msxml2.XMLHTTP.6.0"); } catch (e) {}
+    try { return new ActiveXObject("Msxml2.XMLHTTP.3.0"); } catch (e) {}
+    try { return new ActiveXObject("Msxml2.XMLHTTP"); } catch (e) {}
+    try { return new ActiveXObject("Microsoft.XMLHTTP"); } catch (e) {}
+
+    return null;
+  }
+
+  function sendRequest() {
+    var url = document.getElementById("url").value;
+  }
 };

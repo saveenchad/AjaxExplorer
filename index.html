@@ -44,11 +44,21 @@
                 </div>
                 <div class="pure-u-3-4">
                   <label for="url">URL</label>
-                  <input class="pure-input-1" name="url" type="url"/>
+                  <input class="pure-input-1" name="url" type="url" id="url"/>
                 </div>
               </div>
               <div class="pure-u-1 headers form-control-group">
                 <label>Header(s):</label><br />
+                <div class="pure-u-1">
+                  <label for="header-select" class="pure-u-3-8">Standard Headers:</label>
+                  <select class="pure-u-1-2 header-select" name="header-select" id="header-select">
+                    <option selected disabled>Select A Header</option>
+                    <option value="Accept-Language">Accept-Language</option>
+                    <option value="Connection">Connection</option>
+                    <option value="Content-Type">Content-Type</option>
+                    <option value="User-Agent">User-Agent</option>
+                  </select>
+                </div>
                 <ol id="headers-list">
                   <li class="pure-u-1 headers-list-item">
                     <input class="pure-u-3-8 key" type="text" placeholder="key" />
@@ -58,12 +68,11 @@
               </div>
               <div class="pure-u-1 form-control-group body">
                 <label for="body">Body:</label>
-                <textarea class="pure-input-1 body" rows="7" id="body" disabled></textarea>
+                <textarea class="pure-input-1 body" rows="6" id="body" disabled></textarea>
               </div>
               <div class="pure-u-1 form-actions">
                 <button class="pure-button button-error pure-u-2-10">Clear</button>
                 <button class="pure-button button-success pure-u-2-10">Send</button>
-                <button class="pure-button button-secondary pure-u-2-10 pure-button-disabled" id="pretty">Pretty Print Body</button>
                 <button class="pure-button button-primary pure-u-2-10" id="save">Save Request</button>
               </div>
             </div>
