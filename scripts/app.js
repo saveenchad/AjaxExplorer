@@ -223,6 +223,11 @@ window.onload = function() {
       return;
     }
 
+    if (!namePrompt.match(/^[0-9a-z]+$/)) {
+      alert ("Name is not alphanumeric!");
+      return;
+    }
+
     var saveData = {
       name: namePrompt,
       type: document.getElementById("reqType") != null ? document.getElementById("reqType").value : null,
