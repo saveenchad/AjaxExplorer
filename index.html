@@ -29,6 +29,8 @@
                     <option value="POST">POST</option>
                     <option value="PUT">PUT</option>
                     <option value="DELETE">DELETE</option>
+                    <option value="HEAD">HEAD</option>
+                    <option value="OPTIONS">OPTIONS</option>
                   </select>
                 </div>
                 <div class="pure-u-3-4">
@@ -37,27 +39,27 @@
                 </div>
               </div>
               <div class="pure-u-1 headers form-control-group">
-                <label>Header(s):</label><br />
                 <div class="pure-u-1">
-                  <label for="header-select" class="pure-u-3-8">Standard Headers:</label>
+                  <label for="header-select" class="pure-u-3-8">Add Standard Header:</label>
                   <select class="pure-u-1-2 header-select" name="header-select" id="header-select">
                     <option selected disabled>Select A Header</option>
                     <option value="Accept-Language">Accept-Language</option>
                     <option value="Connection">Connection</option>
                     <option value="Content-Type">Content-Type</option>
                     <option value="User-Agent">User-Agent</option>
+                    <option value="Timeout">Timeout</option>
                   </select>
                 </div>
+                <div class="pure-u-1">
+                  <label class="pure-u-3-8">Add Custom Header:</label>
+                  <button class="pure-u-1-8 pure-button button-secondary" id="addCustom">+</button>
+                </div>
                 <ol id="headers-list">
-                  <li class="pure-u-1 headers-list-item">
-                    <input class="pure-u-3-8 key" type="text" placeholder="key"/>
-                    <input class="pure-u-3-8 value" type="text" placeholder="value"/>
-                  </li>
                 </ol>
               </div>
               <div class="pure-u-1 form-control-group body">
                 <label for="body">Body:</label>
-                <textarea class="pure-input-1 body" rows="6" id="body" disabled></textarea>
+                <textarea class="pure-input-1 body" rows="5" id="body" disabled></textarea>
               </div>
               <div class="pure-u-1 form-actions">
                 <button class="pure-button button-error pure-u-2-10">Clear</button>

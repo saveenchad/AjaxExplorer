@@ -1,4 +1,3 @@
-
 window.onload = function() {
   var savedList = JSON.parse(localStorage.getItem("savedList"));
   if (savedList == null || savedList == "") {
@@ -8,9 +7,10 @@ window.onload = function() {
 
   var requestType = document.getElementById("reqType");
   var standardHeader = document.getElementById("header-select");
+  var addCustomBtn = document.getElementById("addCustom");
   var bodyFormEl = document.getElementById("body");
 
-  addFocusListeners();
+  document.getElementById("save").addEventListener("click", saveRequest);
 
   if (savedList != null) {
     //get the element we want to add children to
@@ -24,7 +24,7 @@ window.onload = function() {
       var text2 = document.createTextNode(savedList[s].name);
       var spanNode2 = document.createElement("span");
       var text3 = document.createTextNode(savedList[s].url);
-      
+
       //add style to the nodes
       divNode.className = "pure-u-1 saved-list-item"
       spanNode1.className = "pure-u-1-10 delete";
@@ -44,7 +44,7 @@ window.onload = function() {
       //append the main divNode to the parent node
       if (node != null)
         node.appendChild(divNode);
-      
+
       //add action listener to the the added child
       innerDivNode.addEventListener("click", loadRequest);
       spanNode1.addEventListener("click", deleteSavedRequest);
@@ -76,27 +76,85 @@ window.onload = function() {
         placeholder = "Keep-Alive";
         break;
       case "Content-Type":
-        placeholder = "text/html"
+        placeholder = "text/html";
         break;
       case "User-Agent":
         placeholder = null;
         break;
+      case "Timeout":
+        placeholder = "5000";
+        break;
     }
+
+    var listItem = document.createElement("LI");
+    listItem.className = "pure-u-1 headers-list-item";
+
+    var key = document.createElement("input");
+    key.type = "text";
+    key.className = "pure-u-3-8";
+    key.value = selectedOpt.value;
+    key.addEventListener("keydown", updateReqPreview);
+
+    var val = document.createElement("input");
+    val.type = "text";
+    val.className = "pure-u-3-8";
+    val.addEventListener("keydown", updateReqPreview);
+
+    var deleteBtn = document.createElement("button");
+    deleteBtn.className = "pure-button button-error pure-u-1-8 remove-std-header";
+    deleteBtn.innerHTML = "X";
+    deleteBtn.addEventListener("click", removeStandardHeader);
 
     if(placeholder === null) {
       var userAgent = window.navigator.userAgent;
-      newStandardHeader = '<li class="pure-u-1 headers-list-item"><input class="pure-u-3-8" type="text" value="' + selectedOpt.value + '"/> <input class="pure-u-3-8" type="text" value="' + userAgent + '" /> <button class="pure-button button-error pure-u-1-8 remove-std-header">X</button></li>';
+      val.value = userAgent;
     } else {
-      newStandardHeader = '<li class="pure-u-1 headers-list-item"><input class="pure-u-3-8" type="text" value="' + selectedOpt.value + '" /> <input class="pure-u-3-8" type="text" placeholder="' + placeholder + '" /> <button class="pure-button button-error pure-u-1-8 remove-std-header">X</button></li>';
+      val.placeholder = placeholder;
     }
 
-    list.innerHTML += newStandardHeader;
+    listItem.appendChild(key);
+    listItem.appendChild(document.createTextNode(" ")); //UI
+    listItem.appendChild(val);
+    listItem.appendChild(document.createTextNode(" ")); // UI
+    listItem.appendChild(deleteBtn);
+
+    list.appendChild(listItem);
 
     selectedOpt.setAttribute("disabled", "disabled");
     standardHeader.selectedIndex = 0;
+  };
 
-    addFocusListeners();
-    addRemoveListeners();
+  addCustomBtn.onclick = function addCustomHeader() {
+    var parent = document.getElementById("headers-list");
+    var list = document.getElementById("headers-list");
+
+    var listItem = document.createElement("LI");
+    listItem.className = "pure-u-1 headers-list-item";
+
+    var key = document.createElement("input");
+    key.type = "text";
+    key.className = "pure-u-3-8";
+    key.placeholder = "key";
+    key.addEventListener("keydown", updateReqPreview);
+
+    var val = document.createElement("input");
+    val.type = "text";
+    val.className = "pure-u-3-8";
+    val.placeholder = "value";
+    val.addEventListener("keydown", updateReqPreview);
+
+    var deleteBtn = document.createElement("button");
+    deleteBtn.className = "pure-button button-error pure-u-1-8 remove-header";
+    deleteBtn.innerHTML = "X";
+    deleteBtn.addEventListener("click", removeHeader);
+
+    listItem.appendChild(key);
+    listItem.appendChild(document.createTextNode(" ")); //UI
+    listItem.appendChild(val);
+    listItem.appendChild(document.createTextNode(" ")); // UI
+    listItem.appendChild(deleteBtn);
+
+    list.appendChild(listItem);
   };
 
   bodyFormEl.onkeyup = function() {
@@ -106,10 +164,7 @@ window.onload = function() {
     var payloadPreview = document.querySelectorAll("pre.payload")[0];
     var input = bodyFormEl.value;
 
-    if(input.length === 0) {
-      payloadPreview.innerHTML = "N/A";
-      return;
-    }
+    if(input.length === 0) return;
 
     var output;
 
@@ -117,53 +172,14 @@ window.onload = function() {
       var obj = JSON.parse(input);
       output = JSON.stringify(obj, undefined, 4);
     } catch(e) {
-      output = "[ERROR] Malformed JSON body! Please fix!\n\nMake sure your JSON follows these rules:\n{\n  \"attribute\" : \"string\",\n  \"attribute\" : number,\n  \"attribute\" : [array],\n  \"attribute\" : {object}\n}";
+      output = "[ERROR] Malformed JSON body! Please fix!\n\nMake sure your JSON follows these rules:\n{\n \"attribute\" : \"string\",\n  \"attribute\" : number,\n  \"attribute\" : [array],\n  \"attribute\" : {object}\n}";
     }
 
     payloadPreview.innerHTML = output;
   }
 
-  function addFocusListeners() {
-    var headerInputs = document.querySelectorAll(".headers input.key");
-    for(var i = 0; i < headerInputs.length; i++) {
-      headerInputs[i].addEventListener("focus", addNewHeader);
-    }
-  }
-
-  function addRemoveListeners() {
-    var buttons = document.querySelectorAll(".remove-header");
-    var stdButtons = document.querySelectorAll(".remove-std-header");
-
-    for(var i = 0; i < buttons.length; i++) {
-      buttons[i].addEventListener("click", removeHeader);
-    }
-
-    for(var j = 0; j < stdButtons.length; j++) {
-      stdButtons[j].addEventListener("click", removeStandardHeader);
-    }
-  }
-
-  function addNewHeader() {
-    var alreadyAdded = this.getAttribute("dirty");
-    if(alreadyAdded === "true") return;
-
-    this.setAttribute("dirty", "true");
-
-    var parent = document.getElementById("headers-list");
-    var newHeader = '<li class="pure-u-1 headers-list-item"><input class="pure-u-3-8 key" type="text" placeholder="key" /> <input class="pure-u-3-8 value" type="text" placeholder="value" /> <button class="pure-button button-error pure-u-1-8 remove-header">X</button></li>';
-    parent.innerHTML += newHeader;
-
-    addFocusListeners();
-    addRemoveListeners();
-  };
-
   function removeHeader() {
     var list = document.getElementById("headers-list");
-
-    var parent = this.parentElement;
-    var prevHeaderKey = parent.previousElementSibling.children[0];
-
-    prevHeaderKey.setAttribute("dirty", "false");
 
     list.removeChild(this.parentNode);
   }
@@ -183,7 +199,10 @@ window.onload = function() {
     list.removeChild(this.parentNode);
   }
 
-  document.getElementById("save").addEventListener("click", saveRequest);
+  function updateReqPreview() {
+    return;
+  }
+
   function saveRequest() {
     var namePrompt = prompt("Please enter a name for your chosen values:");
 
@@ -227,7 +246,7 @@ window.onload = function() {
       var text2 = document.createTextNode(savedList[i].name);
       var spanNode2 = document.createElement("span");
       var text3 = document.createTextNode(savedList[i].url);
-      
+
       //add style to the nodes
       divNode.className = "pure-u-1 saved-list-item"
       spanNode1.className = "pure-u-1-10 delete";
@@ -247,7 +266,7 @@ window.onload = function() {
       //append the main divNode to the parent node
       if (node != null)
         node.appendChild(divNode);
-      
+
       //add action listener to the the added child
       innerDivNode.addEventListener("click", loadRequest);
       spanNode1.addEventListener("click", deleteSavedRequest);
@@ -339,6 +358,4 @@ window.onload = function() {
     }
   }
 */
-
-
 };
