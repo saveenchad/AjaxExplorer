@@ -233,27 +233,31 @@ window.onload = function() {
       return;
     }
 
-    if (!namePrompt.match(/^[0-9a-z]+$/)) {
+    if (!namePrompt.match(/^[0-9a-zA-Z\s]+$/)) {
       alert ("Name is not alphanumeric!");
       return;
     }
+
+    var key;
+    var value;
+
+    var heads = new Array;
+    var headers = document.getElementById("headers-list");
+    var h;
+    alert("length = " + headers.children.length)
+    for (h = 0; h < headers.children.length; h++) {
+      key = headers.children[h].children[0].value;
+      value = headers.children[h].children[1].value;
+      heads.push({key:key,value:value});
+    }
+
+
 
     var saveData = {
       name: namePrompt,
       type: document.getElementById("reqType") != null ? document.getElementById("reqType").value : null,
       url: document.getElementById("url") != null ? document.getElementById("url").value : null,
-      headerList: document.getElementById("headers-list"),
-
-      //headerKey1: document.getElementById("header-key-1") != null ? document.getElementById("header-key-1").value : null,
-      //headerValue1: document.getElementById("header-value-1") != null ? document.getElementById("header-value-1").value : null,
-      /*HeaderKey2: ,
-      HeaderValue2: ,
-      HeaderKey3: ,
-      HeaderValue3: ,
-      HeaderKey4: ,
-      HeaderValue4: ,
-      HeaderKey5: ,
-      HeaderValue5: ,*/
+      headerList: heads,
       body: document.getElementById("body") != null ? document.getElementById("body").value : null
     };
 
@@ -320,21 +324,46 @@ window.onload = function() {
           document.getElementById("reqType").value = savedList[j].type;
           document.getElementById("url").value = savedList[j].url;
           document.getElementById("body").value = savedList[j].body;
+
+          
+          var parentNode = document.getElementById("headers-list");
           var k;
+          for (k = 0; k < parentNode.children.length; k++) {
+            parentNode.removeChild(parentNode.firstChild);
+          }
+          //for (k = 0; k < savedList[j].headerList.length; k++) {
+          //  if (parentNode.hasChildNodes()) {
+          //    parentNode.removeChild(parentNode.firstChild);
+          //  }
+          //}
           for (k = 0; k < savedList[j].headerList.length; k++) {
-            if (savedList[j].headerList[k].firstChild != null && savedList[j].headerList[k].lastChild != null) {
-              var parentNode = document.getElementById("headers-list");
-              var liNode = document.createElement("li");
-              var input1 = document.createElement("input");
-              var input2 = document.createElement("input");
+            //if (savedList[j].headerList[k].child[0] != null && savedList[j].headerList[k].child[1] != null) {
+              
+            var liNode = document.createElement("li");
+            var input1 = document.createElement("input");
+            var input2 = document.createElement("input");
+            var butt = document.createElement("button");
+            var textNode = document.createTextNode("X");
+            butt.addEventListener("click", removeHeader);
 
-              input1.value = savedList[j].headerList[k].firstChild.nodeValue;
-              input2.value = savedList[j].headerList[k].lastChild.nodeValue;
+            liNode.className = "pure-u-1 headers-list-item";
+            input1.className = "pure-u-3-8";
+            input2.className = "pure-u-3-8";
+            butt.className = "pure-button button-error pure-u-1-8 remove-header";
 
-              liNode.appendChild(input1);
-              liNode.appendChild(input2);
-              parentNode.appendChild(liNode);
-            }
+            butt.appendChild(textNode);
+
+              //alert(savedList[j].headerList[k].firstChild.nodeValue);
+
+            input1.value = savedList[j].headerList[k].key;
+            input2.value = savedList[j].headerList[k].value;
+
+            liNode.appendChild(input1);
+            liNode.appendChild(document.createTextNode(" ")); // UI
+            liNode.appendChild(input2);
+            liNode.appendChild(document.createTextNode(" ")); // UI
+            liNode.appendChild(butt);
+            parentNode.appendChild(liNode);
           }
         }
       }
