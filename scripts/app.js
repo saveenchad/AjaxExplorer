@@ -1,9 +1,55 @@
+
 window.onload = function() {
+  var savedList = JSON.parse(localStorage.getItem("savedList"));
+  if (savedList == null || savedList == "") {
+    savedList = new Array;
+    localStorage.setItem("savedList", JSON.stringify(savedList));
+  }
+
   var requestType = document.getElementById("reqType");
   var standardHeader = document.getElementById("header-select");
   var bodyFormEl = document.getElementById("body");
 
   addFocusListeners();
+
+  if (savedList != null) {
+    //get the element we want to add children to
+    var node = document.getElementById("need-children");
+    var s;
+    for (s = 0; s < savedList.length; s++) {
+      var divNode = document.createElement("div");
+      var spanNode1 = document.createElement("span");
+      var text1 = document.createTextNode("X");
+      var innerDivNode = document.createElement("div");
+      var text2 = document.createTextNode(savedList[s].name);
+      var spanNode2 = document.createElement("span");
+      var text3 = document.createTextNode(savedList[s].url);
+      
+      //add style to the nodes
+      divNode.className = "pure-u-1 saved-list-item"
+      spanNode1.className = "pure-u-1-10 delete";
+      innerDivNode.className = "pure-u-22-24 label";
+      spanNode2.className = "pure-u-1 site";
+
+      //append text nodes to nodes
+      spanNode1.appendChild(text1);
+      innerDivNode.appendChild(text2);
+      spanNode2.appendChild(text3);
+
+      //append inner nodes to divNode
+      divNode.appendChild(spanNode1);
+      divNode.appendChild(innerDivNode);
+      divNode.appendChild(spanNode2);
+
+      //append the main divNode to the parent node
+      if (node != null)
+        node.appendChild(divNode);
+      
+      //add action listener to the the added child
+      innerDivNode.addEventListener("click", loadRequest);
+      spanNode1.addEventListener("click", deleteSavedRequest);
+    }
+  }
 
   // when the select box changes
   requestType.onchange = function onTypeChange() {
@@ -137,61 +183,135 @@ window.onload = function() {
     list.removeChild(this.parentNode);
   }
 
+  document.getElementById("save").addEventListener("click", saveRequest);
   function saveRequest() {
-    // use a prompt to get the name that the user wants to set for the request
-    // build an object that holds all the data the user entered. for example:
-    /*
-      saveData: {
-        type: "GET",
-        url: "www.google.com",
-        headers: [
-          {
-            key: headerKey1,
-            value: headerValue1
-          },
-          {
-            key: headerKey1,
-            value: headerValue2
-          }
-        ],
-        body: {
-          ...
-        }
-      }
-    */
-    // maybe use a constructor to make it easier for yourself
-    // store the object in browser local storage
-    // call loadSavedData to update saved list or just build the html and add it
-    // to the list
-  }
+    var namePrompt = prompt("Please enter a name for your chosen values:");
 
-  function loadSavedData() {
-    // read browser local storage
-    // loop through data and build html list item
-    // store
-    // for example:
-    /*
-      <div class="pure-u-1 saved-list-item">
-        <span class="pure-u-1-10 delete">X</span>
-        <div class="pure-u-22-24 label">the save name</div>
-        <span class="pure-u-1 site">the URL</span>
-        <hr>
-      </div>
-    */
-    // add a click event listener to list item to load data
-    /* htmlElement.addEventListener("click", loadRequest); */
+    var saveData = {
+      name: namePrompt,
+      type: document.getElementById("reqType") != null ? document.getElementById("reqType").value : null,
+      url: document.getElementById("url") != null ? document.getElementById("url").value : null,
+      headerList: document.getElementById("headers-list"),
+
+      //headerKey1: document.getElementById("header-key-1") != null ? document.getElementById("header-key-1").value : null,
+      //headerValue1: document.getElementById("header-value-1") != null ? document.getElementById("header-value-1").value : null,
+      /*HeaderKey2: ,
+      HeaderValue2: ,
+      HeaderKey3: ,
+      HeaderValue3: ,
+      HeaderKey4: ,
+      HeaderValue4: ,
+      HeaderKey5: ,
+      HeaderValue5: ,*/
+      body: document.getElementById("body") != null ? document.getElementById("body").value : null
+    };
+
+    //get the element we want to add children to
+    var node = document.getElementById("need-children");
+
+    //add the new saveData to the list of saveData's
+    savedList.push(saveData);
+
+    //removing all the children
+    while (node.hasChildNodes()) {
+      node.removeChild(node.firstChild);
+    }
+
+    var i;
+    for (i = 0; i < savedList.length; i++) {
+      //creating elements and text nodes
+      var divNode = document.createElement("div");
+      var spanNode1 = document.createElement("span");
+      var text1 = document.createTextNode("X");
+      var innerDivNode = document.createElement("div");
+      var text2 = document.createTextNode(savedList[i].name);
+      var spanNode2 = document.createElement("span");
+      var text3 = document.createTextNode(savedList[i].url);
+      
+      //add style to the nodes
+      divNode.className = "pure-u-1 saved-list-item"
+      spanNode1.className = "pure-u-1-10 delete";
+      innerDivNode.className = "pure-u-22-24 label";
+      spanNode2.className = "pure-u-1 site";
+
+      //append text nodes to nodes
+      spanNode1.appendChild(text1);
+      innerDivNode.appendChild(text2);
+      spanNode2.appendChild(text3);
+
+      //append inner nodes to divNode
+      divNode.appendChild(spanNode1);
+      divNode.appendChild(innerDivNode);
+      divNode.appendChild(spanNode2);
+
+      //append the main divNode to the parent node
+      if (node != null)
+        node.appendChild(divNode);
+      
+      //add action listener to the the added child
+      innerDivNode.addEventListener("click", loadRequest);
+      spanNode1.addEventListener("click", deleteSavedRequest);
+      //(divNode.firstChild.nextSibling.innerHTML)
+    }
+    localStorage.removeItem("savedList");
+    localStorage.setItem("savedList", JSON.stringify(savedList));
   }
 
   function loadRequest() {
     // loads the data into the form when a saved list item is clicked on
     // maybe check with the user and see if they want it loaded in case the click was on accident
     /* use confirm() */
+    if (confirm("Are you sure you want to auto-fill the form using this entry?")) {
+      var n = this.innerHTML;
+      var j;
+      for (j = 0; j < savedList.length; j++) {
+        if (savedList[j].name == n) {
+          document.getElementById("reqType").value = savedList[j].type;
+          document.getElementById("url").value = savedList[j].url;
+          document.getElementById("body").value = savedList[j].body;
+          var k;
+          for (k = 0; k < savedList[j].headerList.length; k++) {
+            if (savedList[j].headerList[k].firstChild != null && savedList[j].headerList[k].lastChild != null) {
+              var parentNode = document.getElementById("headers-list");
+              var liNode = document.createElement("li");
+              var input1 = document.createElement("input");
+              var input2 = document.createElement("input");
+
+              input1.value = savedList[j].headerList[k].firstChild.nodeValue;
+              input2.value = savedList[j].headerList[k].lastChild.nodeValue;
+
+              liNode.appendChild(input1);
+              liNode.appendChild(input2);
+              parentNode.appendChild(liNode);
+            }
+          }
+
+        }
+      }
+    }
   }
 
   function deleteSavedRequest() {
-    // removes the list item from the saved list
-    // confrim with the user that they want it deleted
-    /* use confirm() */
+    if (confirm("Are you sure you want to delete this entry?")) {
+      var l;
+      for (l = 0; l < savedList.length; l++) {
+        if (savedList[l].name == this.nextSibling.innerHTML) {
+          savedList.splice(l, 1);
+          break;
+        }
+      }
+      localStorage.removeItem("savedList");
+      localStorage.setItem("savedList", JSON.stringify(savedList));
+
+      var child = this.parentNode.parentNode.firstChild;
+      while(child != null) {
+        if (this.nextSibling.innerHTML == child.firstChild.nextSibling.innerHTML) {
+          this.parentNode.parentNode.removeChild(child);
+          break;
+        }
+        child = child.nextSibling;
+      }
+    }
   }
 
   function createXHR() {
@@ -207,4 +327,18 @@ window.onload = function() {
   function sendRequest() {
     var url = document.getElementById("url").value;
   }
+/*
+  //WHY ARE WE NOT USING THIS sendRequest()?!!!!!!!!!!!!!!!!!
+  function sendRequest() {
+    var xhr = createXHR(); // cross browser XHR creation
+    if (xhr) {
+      //This is doing things ascynhronously
+      xhr.open("GET","http://ajaxref.com/ch1/sayhello.php",true);
+      xhr.onreadystatechange = function(){handleResponse(xhr);};
+      xhr.send(null);
+    }
+  }
+*/
+
+
 };
