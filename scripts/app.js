@@ -180,13 +180,19 @@ window.onload = function() {
 
   function removeHeader() {
     var list = document.getElementById("headers-list");
+    var headersPreview = document.querySelectorAll("pre.headers")[0];
 
     list.removeChild(this.parentNode);
+
+    if(list.children.length === 0) {
+      headersPreview.innerHTML = "N/A";
+    }
   }
 
   function removeStandardHeader() {
     var list = document.getElementById("headers-list");
     var header = this.previousElementSibling.previousElementSibling.value;
+    var headersPreview = document.querySelectorAll("pre.headers")[0];
     var opt;
 
     for(var i = 0; i < standardHeader.options.length; i++) {
@@ -197,10 +203,14 @@ window.onload = function() {
 
     standardHeader.options[opt].removeAttribute("disabled");
     list.removeChild(this.parentNode);
+
+    if(list.children.length === 0) {
+      headersPreview.innerHTML = "N/A";
+    }
   }
 
   function updateReqPreview() {
-    return;
+
   }
 
   function saveRequest() {
@@ -326,7 +336,6 @@ window.onload = function() {
               parentNode.appendChild(liNode);
             }
           }
-
         }
       }
     }

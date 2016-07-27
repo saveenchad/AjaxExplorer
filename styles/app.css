@@ -119,6 +119,10 @@ body {
   margin-bottom: 10px;
 }
 
+#addCustom {
+  font-weight: bold;
+}
+
 .headers ol#headers-list {
   max-height: 108px;
   overflow-y: auto;
