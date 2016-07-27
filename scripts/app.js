@@ -204,7 +204,24 @@ window.onload = function() {
   }
 
   function saveRequest() {
-    var namePrompt = prompt("Please enter a name for your chosen values:");
+    //var namePrompt = prompt("Please enter a name for your chosen values:");
+    var flag = false;
+    var a;
+    var tempArr = new Array;
+    for (a = 0; a < savedList.length; a++) {
+      tempArr[a] = savedList[a].name;
+    }
+    var namePrompt = prompt("Please enter a unique name for your chosen values:");
+    if (namePrompt == null)
+      return;
+    if (tempArr.indexOf(namePrompt) != -1) {
+      alert ("Name is not unique!");
+      return;
+    }
+    if (namePrompt == "") {
+      alert ("Name cannot be an empty string!");
+      return;
+    }
 
     var saveData = {
       name: namePrompt,
