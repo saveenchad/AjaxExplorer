@@ -11,6 +11,7 @@ window.onload = function() {
   var bodyFormEl = document.getElementById("body");
 
   document.getElementById("save").addEventListener("click", saveRequest);
+  document.getElementById("clear").addEventListener("click", clearForm);
 
   if (savedList != null) {
     //get the element we want to add children to
@@ -389,6 +390,19 @@ window.onload = function() {
           break;
         }
         child = child.nextSibling;
+      }
+    }
+  }
+
+  function clearForm() {
+    if (confirm("Are you sure you want to clear this form?")) {
+      document.getElementById("reqType").value = "";
+      document.getElementById("url").value = "";
+      document.getElementById("body").value = "";
+
+      var parentNode = document.getElementById("headers-list");
+      while(parentNode.hasChildNodes()) {
+        parentNode.removeChild(parentNode.firstChild);
       }
     }
   }
