@@ -143,8 +143,8 @@ textarea.body {
   margin: 0 5px;
 }
 
-.responseView .headers,
-.responseView .payload {
+.responseView .request,
+.responseView .response {
   padding: 5px;
   border-radius: 2px;
   height: 38%;

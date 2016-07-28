@@ -12,6 +12,7 @@ window.onload = function() {
 
   document.getElementById("save").addEventListener("click", saveRequest);
   document.getElementById("clear").addEventListener("click", clearForm);
+  document.getElementById("send").addEventListener("click", sendRequest);
 
   if (savedList != null) {
     //get the element we want to add children to
@@ -158,42 +159,39 @@ window.onload = function() {
     list.appendChild(listItem);
   };
 
-  bodyFormEl.onkeyup = function() {
-    var selectedOpt = requestType.options[requestType.selectedIndex].text;
-    if(selectedOpt === "GET") return;
-
-    var payloadPreview = document.querySelectorAll("pre.payload")[0];
-    var input = bodyFormEl.value;
-
-    if(input.length === 0) return;
-
-    var output;
-
-    try {
-      var obj = JSON.parse(input);
-      output = JSON.stringify(obj, undefined, 4);
-    } catch(e) {
-      output = "[ERROR] Malformed JSON body! Please fix!\n\nMake sure your JSON follows these rules:\n{\n \"attribute\" : \"string\",\n  \"attribute\" : number,\n  \"attribute\" : [array],\n  \"attribute\" : {object}\n}";
-    }
-
-    payloadPreview.innerHTML = output;
-  }
+  // bodyFormEl.onkeyup = function() {
+  //   var selectedOpt = requestType.options[requestType.selectedIndex].text;
+  //   if(selectedOpt === "GET") return;
+  //
+  //   var payloadPreview = document.querySelectorAll("pre.payload")[0];
+  //   var input = bodyFormEl.value;
+  //
+  //   if(input.length === 0) {
+  //     payloadPreview.innerHTML = "N/A";
+  //     return;
+  //   };
+  //
+  //   var output;
+  //
+  //   try {
+  //     var obj = JSON.parse(input);
+  //     output = JSON.stringify(obj, undefined, 4);
+  //   } catch(e) {
+  //     output = "[ERROR] Malformed JSON body! Please fix!\n\nMake sure your payload follows these rules:\n{\n  \"attribute\" : \"string\",\n  \"attribute\" : number,\n  \"attribute\" : [array],\n  \"attribute\" : {object}\n}";
+  //   }
+  //
+  //   payloadPreview.innerHTML = output;
+  // }
 
   function removeHeader() {
     var list = document.getElementById("headers-list");
-    var headersPreview = document.querySelectorAll("pre.headers")[0];
 
     list.removeChild(this.parentNode);
-
-    if(list.children.length === 0) {
-      headersPreview.innerHTML = "N/A";
-    }
   }
 
   function removeStandardHeader() {
     var list = document.getElementById("headers-list");
     var header = this.previousElementSibling.previousElementSibling.value;
-    var headersPreview = document.querySelectorAll("pre.headers")[0];
     var opt;
 
     for(var i = 0; i < standardHeader.options.length; i++) {
@@ -204,10 +202,6 @@ window.onload = function() {
 
     standardHeader.options[opt].removeAttribute("disabled");
     list.removeChild(this.parentNode);
-
-    if(list.children.length === 0) {
-      headersPreview.innerHTML = "N/A";
-    }
   }
 
   function updateReqPreview() {
@@ -322,10 +316,13 @@ window.onload = function() {
       for (j = 0; j < savedList.length; j++) {
         if (savedList[j].name == n) {
           document.getElementById("reqType").value = savedList[j].type;
+
+          if(document.getElementById("reqType").value != "GET")
+            document.getElementById("body").removeAttribute("disabled");
+
           document.getElementById("url").value = savedList[j].url;
           document.getElementById("body").value = savedList[j].body;
 
-          
           var parentNode = document.getElementById("headers-list");
           var k;
           for (k = 0; k < parentNode.children.length; k++) {
@@ -334,7 +331,7 @@ window.onload = function() {
 
           for (k = 0; k < savedList[j].headerList.length; k++) {
             //if (savedList[j].headerList[k].child[0] != null && savedList[j].headerList[k].child[1] != null) {
-              
+
             var liNode = document.createElement("li");
             var input1 = document.createElement("input");
             var input2 = document.createElement("input");
@@ -348,7 +345,7 @@ window.onload = function() {
             butt.className = "pure-button button-error pure-u-1-8 remove-header";
 
             butt.appendChild(textNode);
-            
+
             input1.value = savedList[j].headerList[k].key;
             input2.value = savedList[j].headerList[k].value;
 
@@ -389,9 +386,15 @@ window.onload = function() {
 
   function clearForm() {
     if (confirm("Are you sure you want to clear this form?")) {
-      document.getElementById("reqType").value = "";
+      document.getElementById("reqType").selectedIndex = 0;
       document.getElementById("url").value = "";
-      document.getElementById("body").value = "";
+      var body = document.getElementById("body");
+
+      body.value = "";
+      body.setAttribute("disabled", "disabled");
+
+      document.getElementById("request-view").innerHTML = "N/A";
+      document.getElementById("response-view").innerHTML = "N/A";
 
       for(var i = 0; i < standardHeader.options.length; i++) {
         standardHeader.options[i].removeAttribute("disabled");
@@ -415,7 +418,79 @@ window.onload = function() {
   }
 
   function sendRequest() {
+    var selectedReqType = requestType.options[requestType.selectedIndex].text;
     var url = document.getElementById("url").value;
+    var payload, headers = document.getElementById("headers-list");
+    var headerKey, headerVal, xhr;
+
+    url.replace("http:", "https:");
+
+    xhr = createXHR();
+    if(xhr === null) return;
+
+    xhr.open(selectedReqType, url, true);
+
+    for(i = 0; i < headers.children.length; i++) {
+      headerKey = headers.children[i].children[0].value.replace(/^\s+|\s+$/g, "");
+      if(headerKey.value === "") continue;
+      headerVal = headers.children[i].children[1].value;
+      xhr.setRequestHeader(headerKey, headerVal);
+    }
+
+    if(selectedReqType !== "GET") {
+      try {
+        var body = JSON.parse(document.getElementById("body").value);
+        payload = JSON.stringify(body, undefined, 4);
+      } catch(e) {
+        alert("[ERROR] Malformed JSON body! Please fix!\n\nMake sure your payload follows these rules:\n{\n  \"attribute\" : \"string\",\n  \"attribute\" : number,\n  \"attribute\" : [array],\n  \"attribute\" : {object}\n}");
+        return;
+      }
+    } else {
+      payload = null;
+    }
+
+    if(selectedReqType === "POST") {
+      xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+    }
+
+    xhr.onreadystatechange = function readyStateChange() {
+      handleResponse(xhr, selectedReqType, payload);
+    };
+
+    if(payload === null) {
+      xhr.send();
+    } else {
+      xhr.send(JSON.stringify(payload));
+    }
+  }
+
+  function handleResponse(xhr, method, payload) {
+    if(xhr.readyState === 4) {
+      if(xhr.status === 200) {
+        var requestView = document.getElementById("request-view");
+        var responseView = document.getElementById("response-view");
+
+        var convertedHeaders = xhr.getAllResponseHeaders().replace(/<([^>]*)>/g, "&lt;$1&gt;");
+        convertedHeaders = convertedHeaders.replace(/\r\n/g, "<br/>").replace(/\n/g, "<br/>");
+
+        requestView.innerHTML = "HEADERS:\n\n";
+        requestView.innerHTML += JSON.stringify(JSON.parse(xhr.responseText).headers, undefined, 4);
+
+        responseView.innerHTML = "HEADERS:\n\n";
+        responseView.innerHTML += JSON.stringify(convertedHeaders, undefined, 4);
+
+        responseView.innerHTML += "\n\nPAYLOAD:\n\n";
+        responseView.innerHTML += JSON.stringify(JSON.parse(xhr.responseText), undefined, 4);
+
+        if(method !== "GET") {
+          var payload = JSON.parse(xhr.responseText).form;
+          requestView.innerHTML += "\n\nPAYLOAD:\n\n";
+          requestView.innerHTML += JSON.stringify(payload, undefined, 4);
+        }
+      } else {
+        alert("[ERROR] There was a problem sending the request. Please make it work and try again :)");
+      }
+    }
   }
 /*
   //WHY ARE WE NOT USING THIS sendRequest()?!!!!!!!!!!!!!!!!!

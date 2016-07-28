@@ -35,7 +35,7 @@
                 </div>
                 <div class="pure-u-3-4">
                   <label for="url">URL</label>
-                  <input class="pure-input-1" name="url" type="url" id="url"/>
+                  <input class="pure-input-1" name="url" type="url" id="url" required/>
                 </div>
               </div>
               <div class="pure-u-1 headers form-control-group">
@@ -63,19 +63,19 @@
               </div>
               <div class="pure-u-1 form-actions">
                 <button class="pure-button button-error pure-u-2-10" id="clear">Clear</button>
-                <button class="pure-button button-success pure-u-2-10">Send</button>
+                <button class="pure-button button-success pure-u-2-10" id="send">Send</button>
                 <button class="pure-button button-primary pure-u-2-10" id="save">Save Request</button>
               </div>
             </div>
           </div>
         </div>
         <div class="pure-u-9-24 pure-u-sm-9-24 pure-u-md-9-24 pure-u-lg-9-24 explorer-card">
-          <h4 class="pure-u-1 title">Form Preview</h4>
+          <h4 class="pure-u-1 title">Request Results</h4>
           <div class="pure-u-1 responseView">
-            <span class="pure-u-1">Headers</span>
-            <pre class="pure-u-23-24 headers"></pre>
-            <span class="pure-u-1">Payload</span>
-            <pre class="pure-u-23-24 payload">N/A</pre>
+            <span class="pure-u-1">Request</span>
+            <pre class="pure-u-23-24 request" id="request-view">N/A</pre>
+            <span class="pure-u-1">Response</span>
+            <pre class="pure-u-23-24 response" id="response-view">N/A</pre>
           </div>
         </div>
       </div>
