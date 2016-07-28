@@ -24,3 +24,15 @@ Edge cases might have been missed...idk tho
 The saved list.
 
 The UI
+
+### Advanced Solution
+
+We validated our HTML, and CSS and also our JS with ES6 option turned on
+
+A non-minified version of our JS and CSS is available in the scripts and styles folders.
+
+The minified versions are being loaded into the app.
+
+Our UI is highly polished and responsive (there's an animation too!)
+
+We added a clear button that resets the form fields.

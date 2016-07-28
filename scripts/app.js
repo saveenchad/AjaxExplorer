@@ -17,7 +17,8 @@ window.onload = function() {
   if (savedList != null) {
     //get the element we want to add children to
     var node = document.getElementById("need-children");
-    var divNode, spanNode1, text1, innerDivNode, text2, spanNode2, text3;
+    var divNode; var spanNode1; var text1; var innerDivNode; var text2;
+    var spanNode2; var text3;
     for(var s = 0; s < savedList.length; s+=1) {
       divNode = document.createElement("div");
       spanNode1 = document.createElement("span");
@@ -411,7 +412,7 @@ window.onload = function() {
 
     for(i = 0; i < headers.children.length; i++) {
       headerKey = headers.children[i].children[0].value.replace(/^\s+|\s+$/g, "");
-      if(headerKey.value === "") continue;
+      if(headerKey === "" || headerKey === undefined || headerKey === null) continue;
       headerVal = headers.children[i].children[1].value;
       xhr.setRequestHeader(headerKey, headerVal);
     }
