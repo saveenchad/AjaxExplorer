@@ -1,36 +1,26 @@
 # AjaxExplorer
 The Super Endpoint Explorer (SEE) app will allow the end user to craft requests to a remote end-point by filling out various form fields, send the request and show the response, and save common request configurations for later playback. The form of the tool is roughly like the Chrome Extension called Postman or an OSX HTTP exploration like Paw but obviously less polished and feature laden.
 
-# How to Git
+### Information For The Grader
 
-### Pull the remote repo
+After saving a request, you have to click on the red title to load it again or click the X to delete it.
 
-(ssh) `git clone git@github.com:saveenchad/AjaxExplorer.git`
+When more than 3 headers are added, you have to scroll to see the rest of them. The scrollbar might not show depending on the OS you're using.
 
-(https) `git clone https://github.com/saveenchad/AjaxExplorer.git`
+For both the requests and the response boxes, the headers are displayed first and the then the payload, so simply scroll to see the whole response or request :)
 
-### Make a local dev branch to work on
+The body should be in JSON format but an error message will let you know if it isn't.
 
-`git checkout -b dev`
+There is no validation on the standard header values...please be merciful.
 
-### When you want to commit
+### Missing Features or Problems
 
-`git status` to see which files you have edited
+Headers and payload might not be complete. We just display whatever's in the xhr object
 
-`git add .` to stage the files of the current directory
+Edge cases might have been missed...idk tho
 
-`git commit -m "INSERT COMMIT MESSAGE HERE"` to commit the staged files
+### High Quality Sections
 
-`git checkout master` to go back to master branch that everyone has access to
+The saved list.
 
-`git pull origin master` to pull the latest code onto master branch
-
-`git rebase master dev` to put what you just pulled onto your dev branch. Moves you automatically to dev branch. You might get merge conflicts here so just follow the instructions on the console to fix
-
-`git checkout master` to get back to master after rebasing
-
-`git merge master dev` to merge your commits onto master
-
-`git push origin master` to push code to remote repo
-
-`git checkout dev` move back to dev branch to do more work
+The UI
