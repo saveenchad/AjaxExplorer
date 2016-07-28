@@ -1,7 +1,7 @@
 window.onload = function() {
   var savedList = JSON.parse(localStorage.getItem("savedList"));
   if (savedList == null || savedList == "") {
-    savedList = new Array;
+    savedList = new Array();
     localStorage.setItem("savedList", JSON.stringify(savedList));
   }
 
@@ -17,18 +17,18 @@ window.onload = function() {
   if (savedList != null) {
     //get the element we want to add children to
     var node = document.getElementById("need-children");
-    var s;
-    for (s = 0; s < savedList.length; s++) {
-      var divNode = document.createElement("div");
-      var spanNode1 = document.createElement("span");
-      var text1 = document.createTextNode("X");
-      var innerDivNode = document.createElement("div");
-      var text2 = document.createTextNode(savedList[s].name);
-      var spanNode2 = document.createElement("span");
-      var text3 = document.createTextNode(savedList[s].url);
+    var divNode, spanNode1, text1, innerDivNode, text2, spanNode2, text3;
+    for(var s = 0; s < savedList.length; s+=1) {
+      divNode = document.createElement("div");
+      spanNode1 = document.createElement("span");
+      text1 = document.createTextNode("X");
+      innerDivNode = document.createElement("div");
+      text2 = document.createTextNode(savedList[s].name);
+      spanNode2 = document.createElement("span");
+      text3 = document.createTextNode(savedList[s].url);
 
       //add style to the nodes
-      divNode.className = "pure-u-1 saved-list-item"
+      divNode.className = "pure-u-1 saved-list-item";
       spanNode1.className = "pure-u-1-10 delete";
       innerDivNode.className = "pure-u-22-24 label";
       spanNode2.className = "pure-u-1 site";
@@ -44,8 +44,9 @@ window.onload = function() {
       divNode.appendChild(spanNode2);
 
       //append the main divNode to the parent node
-      if (node != null)
+      if (node != null) {
         node.appendChild(divNode);
+      }
 
       //add action listener to the the added child
       innerDivNode.addEventListener("click", loadRequest);
@@ -86,6 +87,8 @@ window.onload = function() {
       case "Timeout":
         placeholder = "5000";
         break;
+      default:
+        placeholder = "";
     }
 
     var listItem = document.createElement("LI");
@@ -158,30 +161,6 @@ window.onload = function() {
 
     list.appendChild(listItem);
   };
-
-  // bodyFormEl.onkeyup = function() {
-  //   var selectedOpt = requestType.options[requestType.selectedIndex].text;
-  //   if(selectedOpt === "GET") return;
-  //
-  //   var payloadPreview = document.querySelectorAll("pre.payload")[0];
-  //   var input = bodyFormEl.value;
-  //
-  //   if(input.length === 0) {
-  //     payloadPreview.innerHTML = "N/A";
-  //     return;
-  //   };
-  //
-  //   var output;
-  //
-  //   try {
-  //     var obj = JSON.parse(input);
-  //     output = JSON.stringify(obj, undefined, 4);
-  //   } catch(e) {
-  //     output = "[ERROR] Malformed JSON body! Please fix!\n\nMake sure your payload follows these rules:\n{\n  \"attribute\" : \"string\",\n  \"attribute\" : number,\n  \"attribute\" : [array],\n  \"attribute\" : {object}\n}";
-  //   }
-  //
-  //   payloadPreview.innerHTML = output;
-  // }
 
   function removeHeader() {
     var list = document.getElementById("headers-list");
@@ -492,16 +471,4 @@ window.onload = function() {
       }
     }
   }
-/*
-  //WHY ARE WE NOT USING THIS sendRequest()?!!!!!!!!!!!!!!!!!
-  function sendRequest() {
-    var xhr = createXHR(); // cross browser XHR creation
-    if (xhr) {
-      //This is doing things ascynhronously
-      xhr.open("GET","http://ajaxref.com/ch1/sayhello.php",true);
-      xhr.onreadystatechange = function(){handleResponse(xhr);};
-      xhr.send(null);
-    }
-  }
-*/
 };
