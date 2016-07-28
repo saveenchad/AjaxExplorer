@@ -245,9 +245,8 @@ window.onload = function() {
     var heads = new Array;
     var headers = document.getElementById("headers-list");
     var h;
-    alert("length = " + headers.children.length)
     for (h = 0; h < headers.children.length; h++) {
-      key = headers.children[h].children[0].value;
+      key = headers.children[h].children[0].value.replace(/^\s+|\s+$/g, "");;
       value = headers.children[h].children[1].value;
       heads.push({key:key,value:value});
     }
@@ -332,11 +331,7 @@ window.onload = function() {
           for (k = 0; k < parentNode.children.length; k++) {
             parentNode.removeChild(parentNode.firstChild);
           }
-          //for (k = 0; k < savedList[j].headerList.length; k++) {
-          //  if (parentNode.hasChildNodes()) {
-          //    parentNode.removeChild(parentNode.firstChild);
-          //  }
-          //}
+
           for (k = 0; k < savedList[j].headerList.length; k++) {
             //if (savedList[j].headerList[k].child[0] != null && savedList[j].headerList[k].child[1] != null) {
               
@@ -353,9 +348,7 @@ window.onload = function() {
             butt.className = "pure-button button-error pure-u-1-8 remove-header";
 
             butt.appendChild(textNode);
-
-              //alert(savedList[j].headerList[k].firstChild.nodeValue);
-
+            
             input1.value = savedList[j].headerList[k].key;
             input2.value = savedList[j].headerList[k].value;
 
@@ -399,6 +392,10 @@ window.onload = function() {
       document.getElementById("reqType").value = "";
       document.getElementById("url").value = "";
       document.getElementById("body").value = "";
+
+      for(var i = 0; i < standardHeader.options.length; i++) {
+        standardHeader.options[i].removeAttribute("disabled");
+      }
 
       var parentNode = document.getElementById("headers-list");
       while(parentNode.hasChildNodes()) {
